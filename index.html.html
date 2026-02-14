@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine's Day - For Sis</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Poppins:wght@300;400;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            overflow-x: hidden;
+            font-family: 'Poppins', sans-serif;
+            position: relative;
+            touch-action: none;
+        }
+
+        /* Stars */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* Container */
+        .container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 40px;
+        }
+
+        /* Envelope Section */
+        .envelope-section {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* Envelope - UNFOLDS APART */
+        .envelope-wrapper {
+            position: relative;
+            width: 220px;
+            height: 150px;
+            perspective: 1000px;
+            margin-bottom: 20px;
+            z-index: 10;
+        }
+
+        .envelope {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: all 0.8s ease;
+        }
+
+        .envelope.open {
+            transform: scale(0.9);
+            opacity: 0;
+        }
+
+        .envelope-body {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(145deg, #ffb6c1 0%, #ffc0cb 50%, #ffb6c1 100%);
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 5;
+            transition: all 0.6s ease;
+        }
+
+        .envelope.open .envelope-body {
+            transform: translateY(50px) scale(0.8);
+            opacity: 0;
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(145deg, #ff69b4 0%, #ff1493 100%);
+            clip-path: polygon(0 0, 50% 100%, 100% 0);
+            transform-origin: top;
+            transition: all 0.6s ease;
+            z-index: 15;
+        }
+
+        .envelope.open .envelope-flap {
+            transform: rotateX(-120deg);
+            opacity: 0;
+        }
+
+        .envelope-front {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(145deg, #ffc0cb 0%, #ffb6c1 100%);
+            clip-path: polygon(0 100%, 50% 0, 100% 100%);
+            z-index: 10;
+            transition: all 0.6s ease;
+            transform-origin: bottom;
+        }
+
+        .envelope.open .envelope-front {
+            transform: rotateX(120deg);
+            opacity: 0;
+        }
+
+        /* Letter - HIGH Z-INDEX to cover button */
+        .letter {
+            position: absolute;
+            top: 120%;
+            left: 50%;
+            transform: translateX(-50%) scale(0.5);
+            width: 320px;
+            min-height: 380px;
+            background: linear-gradient(145deg, #fff5f5 0%, #ffe4e1 100%);
+            border-radius: 15px;
+            padding: 35px 30px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.4);
+            z-index: 100; /* HIGH z-index to cover button */
+            opacity: 0;
+            transition: all 0.8s ease 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            text-align: center;
+            border: 3px solid #ffb6c1;
+            pointer-events: auto;
+        }
+
+        .envelope.open ~ .letter {
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
+            top: 20px;
+        }
+
+        .letter-content {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease 0.6s;
+            font-family: 'Dancing Script', cursive;
+            font-size: 19px;
+            color: #d63384;
+            line-height: 2;
+            width: 100%;
+            padding-top: 10px;
+        }
+
+        .envelope.open ~ .letter .letter-content {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .letter-signature {
+            margin-top: 30px;
+            font-size: 28px;
+            font-weight: 700;
+            color: #ff1493;
+        }
+
+        .pulsating-heart {
+            font-size: 42px;
+            color: #ff1493;
+            animation: pulse 1.5s infinite;
+            margin-top: 25px;
+            display: inline-block;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+
+        /* Button - LOWER z-index, moves under letter */
+        .btn-container {
+            position: relative;
+            z-index: 5; /* Lower than letter */
+            margin-top: 10px;
+            transition: all 0.5s ease;
+        }
+
+        .envelope.open ~ .btn-container {
+            z-index: 1; /* Even lower when letter is out */
+            opacity: 0.3; /* Dimmed when letter covers it */
+            pointer-events: none; /* Can't click through letter */
+        }
+
+        .btn {
+            background: linear-gradient(145deg, #ff69b4, #ff1493);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255,20,147,0.4);
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+            position: relative;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255,20,147,0.6);
+        }
+
+        /* Garden Section */
+        .garden-section {
+            position: relative;
+            width: 100%;
+            height: 260px;
+            margin-top: 20px;
+            overflow: visible;
+            z-index: 5; /* Lower than letter */
+        }
+
+        .envelope.open ~ .garden-section {
+            z-index: 1; /* Even lower when letter is out */
+        }
+
+        .ground {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 50px;
+            background: linear-gradient(to top, #2d5016 0%, #3d6b1f 100%);
+            border-radius: 50% 50% 0 0 / 15px 15px 0 0;
+        }
+
+        .flowers-container {
+            position: absolute;
+            bottom: 35px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 35px;
+            align-items: flex-end;
+            pointer-events: none;
+        }
+
+        .flower {
+            position: relative;
+            transform-origin: bottom center;
+            transform: scale(0);
+            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .flower.bloomed {
+            transform: scale(1);
+        }
+
+        .flower-sway {
+            animation: sway 3s ease-in-out infinite;
+            transform-origin: bottom center;
+        }
+
+        @keyframes sway {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
+        }
+
+        /* Tulip */
+        .tulip .stem {
+            width: 4px;
+            height: 70px;
+            background: linear-gradient(to top, #228b22, #32cd32);
+            margin: 0 auto;
+            border-radius: 2px;
+        }
+
+        .tulip .leaf {
+            position: absolute;
+            bottom: 15px;
+            width: 26px;
+            height: 35px;
+            background: linear-gradient(145deg, #228b22, #32cd32);
+            border-radius: 0 100% 0 100%;
+        }
+
+        .tulip .leaf.left {
+            left: -13px;
+            transform: rotate(-30deg);
+        }
+
+        .tulip .leaf.right {
+            right: -13px;
+            transform: rotate(30deg) scaleX(-1);
+        }
+
+        .tulip .bloom {
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 42px;
+            height: 52px;
+            background: linear-gradient(145deg, #ff69b4, #ff1493);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+        }
+
+        .tulip .bloom::before {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 34px;
+            height: 42px;
+            background: linear-gradient(145deg, #ff1493, #c71585);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+        }
+
+        /* Lily */
+        .lily .stem {
+            width: 4px;
+            height: 85px;
+            background: linear-gradient(to top, #228b22, #32cd32);
+            margin: 0 auto;
+            border-radius: 2px;
+        }
+
+        .lily .leaf {
+            position: absolute;
+            bottom: 25px;
+            width: 30px;
+            height: 42px;
+            background: linear-gradient(145deg, #228b22, #32cd32);
+            border-radius: 0 100% 0 100%;
+        }
+
+        .lily .leaf.left {
+            left: -16px;
+            transform: rotate(-45deg);
+        }
+
+        .lily .leaf.right {
+            right: -16px;
+            transform: rotate(45deg) scaleX(-1);
+        }
+
+        .lily .bloom {
+            position: absolute;
+            top: -55px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 52px;
+            height: 62px;
+        }
+
+        .lily-petal {
+            position: absolute;
+            width: 20px;
+            height: 52px;
+            background: linear-gradient(to top, #fff0f5, #ffb6c1);
+            border-radius: 50% 50% 50% 50% / 70% 70% 30% 30%;
+            transform-origin: bottom center;
+        }
+
+        .lily-petal:nth-child(1) { transform: rotate(0deg) translateY(-5px); }
+        .lily-petal:nth-child(2) { transform: rotate(72deg) translateY(-5px); }
+        .lily-petal:nth-child(3) { transform: rotate(144deg) translateY(-5px); }
+        .lily-petal:nth-child(4) { transform: rotate(216deg) translateY(-5px); }
+        .lily-petal:nth-child(5) { transform: rotate(288deg) translateY(-5px); }
+
+        .lily-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 12px;
+            height: 12px;
+            background: radial-gradient(circle, #ffd700, #ff8c00);
+            border-radius: 50%;
+            z-index: 10;
+        }
+
+        /* Watering Can */
+        .watering-can {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            width: 70px;
+            height: 50px;
+            cursor: grab;
+            z-index: 100;
+            touch-action: none;
+            user-select: none;
+            will-change: transform;
+        }
+
+        .watering-can.dragging {
+            cursor: grabbing;
+        }
+
+        .can-body {
+            position: absolute;
+            width: 50px;
+            height: 40px;
+            background: linear-gradient(145deg, #87ceeb, #4682b4);
+            border-radius: 8px 8px 15px 15px;
+            bottom: 0;
+            left: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .can-handle {
+            position: absolute;
+            top: 5px;
+            right: -12px;
+            width: 15px;
+            height: 25px;
+            border: 3px solid #4682b4;
+            border-left: none;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .can-spout {
+            position: absolute;
+            top: 8px;
+            left: -15px;
+            width: 20px;
+            height: 6px;
+            background: linear-gradient(to left, #4682b4, #87ceeb);
+            border-radius: 3px;
+            transform: rotate(-30deg);
+        }
+
+        .can-spout::after {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: -2px;
+            width: 12px;
+            height: 10px;
+            background: #87ceeb;
+            border-radius: 50%;
+        }
+
+        /* Water drops */
+        .water-drop {
+            position: absolute;
+            width: 6px;
+            height: 10px;
+            background: linear-gradient(to bottom, #87ceeb, #4682b4);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        @keyframes fall {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(120px) scale(0.5); }
+        }
+
+        .instruction {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ffb6c1;
+            font-size: 13px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 2s ease, color 0.5s ease;
+            text-align: center;
+            width: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .envelope.open ~ .garden-section .instruction {
+            z-index: 1; /* Lower when letter is out */
+            opacity: 0; /* Hide when letter covers */
+        }
+
+        .instruction.visible {
+            opacity: 0.9;
+            animation: bounce 2s infinite;
+        }
+
+        .instruction.highlight {
+            color: #ffd700;
+            font-weight: 600;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #ffd700;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: sparkle 1s forwards;
+        }
+
+        @keyframes sparkle {
+            0% { transform: scale(0) rotate(0deg); opacity: 1; }
+            100% { transform: scale(1.5) rotate(180deg); opacity: 0; }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .container {
+                margin-top: 30px;
+            }
+            
+            .envelope-wrapper {
+                width: 200px;
+                height: 135px;
+            }
+            
+            .letter {
+                width: 300px;
+                min-height: 350px;
+                padding: 30px 25px;
+                top: 130%;
+            }
+            
+            .envelope.open ~ .letter {
+                top: 10px;
+            }
+            
+            .letter-content {
+                font-size: 18px;
+            }
+            
+            .flowers-container {
+                gap: 30px;
+            }
+
+            .garden-section {
+                height: 240px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .envelope-wrapper {
+                width: 180px;
+                height: 120px;
+            }
+            
+            .letter {
+                width: 280px;
+                min-height: 320px;
+                padding: 25px 20px;
+            }
+            
+            .letter-content {
+                font-size: 17px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Stars -->
+    <div class="stars" id="stars"></div>
+
+    <div class="container">
+        <!-- Envelope Section -->
+        <div class="envelope-section">
+            <div class="envelope-wrapper">
+                <div class="envelope" id="envelope">
+                    <div class="envelope-flap"></div>
+                    <div class="envelope-body"></div>
+                    <div class="envelope-front"></div>
+                </div>
+                
+                <!-- Letter positioned below envelope -->
+                <div class="letter">
+                    <div class="letter-content">
+                        <p>just like how you watered these flowers you've watered me as your friend and I am nothing short of grateful for it, happy Valentine's Day sis</p>
+                        <div class="letter-signature">Tabs</div>
+                        <div class="pulsating-heart">❤️</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Button in separate container with lower z-index -->
+            <div class="btn-container">
+                <button class="btn" id="toggleBtn" onclick="toggleEnvelope()">Open</button>
+            </div>
+        </div>
+
+        <!-- Garden Section -->
+        <div class="garden-section" id="garden">
+            <div class="instruction" id="instruction">Drag the watering can to water the flowers! 🚿</div>
+            
+            <div class="watering-can" id="wateringCan">
+                <div class="can-body"></div>
+                <div class="can-handle"></div>
+                <div class="can-spout"></div>
+            </div>
+
+            <div class="flowers-container">
+                <div class="flower tulip" id="tulip" data-watered="false">
+                    <div class="flower-sway">
+                        <div class="bloom"></div>
+                        <div class="leaf left"></div>
+                        <div class="leaf right"></div>
+                        <div class="stem"></div>
+                    </div>
+                </div>
+
+                <div class="flower lily" id="lily" data-watered="false">
+                    <div class="flower-sway">
+                        <div class="bloom">
+                            <div class="lily-petal"></div>
+                            <div class="lily-petal"></div>
+                            <div class="lily-petal"></div>
+                            <div class="lily-petal"></div>
+                            <div class="lily-petal"></div>
+                            <div class="lily-center"></div>
+                        </div>
+                        <div class="leaf left"></div>
+                        <div class="leaf right"></div>
+                        <div class="stem"></div>
+                    </div>
+                </div>
+
+                <div class="flower tulip" id="tulip2" data-watered="false">
+                    <div class="flower-sway">
+                        <div class="bloom"></div>
+                        <div class="leaf left"></div>
+                        <div class="leaf right"></div>
+                        <div class="stem"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ground"></div>
+        </div>
+    </div>
+
+    <script>
+        // Create stars
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 50; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            starsContainer.appendChild(star);
+        }
+
+        // Envelope toggle
+        let isOpen = false;
+        function toggleEnvelope() {
+            const envelope = document.getElementById('envelope');
+            const btn = document.getElementById('toggleBtn');
+            
+            isOpen = !isOpen;
+            if (isOpen) {
+                envelope.classList.add('open');
+                btn.textContent = 'Close';
+            } else {
+                envelope.classList.remove('open');
+                btn.textContent = 'Open';
+            }
+        }
+
+        // Watering can
+        const wateringCan = document.getElementById('wateringCan');
+        const garden = document.getElementById('garden');
+        const flowers = document.querySelectorAll('.flower');
+        const instruction = document.getElementById('instruction');
+        
+        let isDragging = false;
+        let xOffset = 0;
+        let yOffset = 0;
+        let hasWateredAll = false;
+        let wateredCount = 0;
+        let isWatering = false;
+
+        const gardenRect = garden.getBoundingClientRect();
+        const canRect = wateringCan.getBoundingClientRect();
+        let startX = canRect.left - gardenRect.left;
+        let startY = canRect.top - gardenRect.top;
+
+        wateringCan.style.left = startX + 'px';
+        wateringCan.style.top = startY + 'px';
+
+        if (window.PointerEvent) {
+            wateringCan.addEventListener('pointerdown', dragStart, { passive: false });
+            document.addEventListener('pointermove', drag, { passive: false });
+            document.addEventListener('pointerup', dragEnd);
+        } else {
+            wateringCan.addEventListener('mousedown', dragStart);
+            wateringCan.addEventListener('touchstart', dragStart, { passive: false });
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('touchmove', drag, { passive: false });
+            document.addEventListener('mouseup', dragEnd);
+            document.addEventListener('touchend', dragEnd);
+        }
+
+        function dragStart(e) {
+            if (hasWateredAll) return;
+            e.preventDefault();
+            isDragging = true;
+            wateringCan.classList.add('dragging');
+            
+            const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+            const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+            
+            const rect = wateringCan.getBoundingClientRect();
+            xOffset = clientX - rect.left;
+            yOffset = clientY - rect.top;
+            
+            instruction.classList.add('visible');
+        }
+
+        function drag(e) {
+            if (!isDragging) return;
+            e.preventDefault();
+            
+            const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+            const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+            
+            const gardenRect = garden.getBoundingClientRect();
+            const x = clientX - gardenRect.left - xOffset;
+            const y = clientY - gardenRect.top - yOffset;
+            
+            wateringCan.style.left = x + 'px';
+            wateringCan.style.top = y + 'px';
+            
+            checkWatering();
+        }
+
+        function dragEnd() {
+            isDragging = false;
+            wateringCan.classList.remove('dragging');
+            isWatering = false;
+        }
+
+        function checkWatering() {
+            if (hasWateredAll || isWatering) return;
+            
+            const canRect = wateringCan.getBoundingClientRect();
+            const spoutX = canRect.left + 5;
+            const spoutY = canRect.top + 20;
+
+            flowers.forEach((flower) => {
+                if (flower.dataset.watered === "true") return;
+                
+                const flowerRect = flower.getBoundingClientRect();
+                const flowerCenter = flowerRect.left + flowerRect.width / 2;
+                const flowerTop = flowerRect.top;
+                
+                const horizontalDist = Math.abs(spoutX - flowerCenter);
+                const verticalDist = spoutY - flowerTop;
+                
+                if (horizontalDist < 50 && verticalDist > -10 && verticalDist < 70) {
+                    isWatering = true;
+                    waterFlower(flower, spoutX, spoutY);
+                }
+            });
+        }
+
+        function waterFlower(flower, x, y) {
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const drop = document.createElement('div');
+                    drop.className = 'water-drop';
+                    drop.style.left = (x + (Math.random() - 0.5) * 10) + 'px';
+                    drop.style.top = y + 'px';
+                    drop.style.animation = `fall ${0.5 + Math.random() * 0.3}s ease-in forwards`;
+                    garden.appendChild(drop);
+                    setTimeout(() => drop.remove(), 800);
+                }, i * 70);
+            }
+            
+            flower.dataset.watered = "true";
+            wateredCount++;
+            
+            setTimeout(() => {
+                flower.classList.add('bloomed');
+                const flowerRect = flower.getBoundingClientRect();
+                
+                for (let i = 0; i < 8; i++) {
+                    setTimeout(() => {
+                        const sparkle = document.createElement('div');
+                        sparkle.className = 'sparkle';
+                        sparkle.style.left = (flowerRect.left + flowerRect.width/2 + (Math.random() - 0.5) * 60) + 'px';
+                        sparkle.style.top = (flowerRect.top + (Math.random() - 0.5) * 60) + 'px';
+                        garden.appendChild(sparkle);
+                        setTimeout(() => sparkle.remove(), 1000);
+                    }, i * 40);
+                }
+                
+                if (wateredCount >= flowers.length) {
+                    hasWateredAll = true;
+                    instruction.textContent = 'Beautiful! Now open the envelope 💌';
+                    instruction.classList.add('highlight');
+                }
+                
+                setTimeout(() => { isWatering = false; }, 400);
+            }, 500);
+        }
+
+        setTimeout(() => {
+            if (wateredCount === 0 && !isDragging) {
+                instruction.classList.add('visible');
+            }
+        }, 2000);
+
+        document.addEventListener('touchmove', (e) => {
+            if (isDragging) e.preventDefault();
+        }, { passive: false });
+    </script>
+</body>
+</html>
